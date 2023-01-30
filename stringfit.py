@@ -5,7 +5,6 @@ from numpy.random import rand
 from random import choices
 from random import choice
 
-
 import string
  
 # objective function
@@ -47,10 +46,11 @@ def mutation(bitstring, r_mut, cset):
  
      
 # genetic algorithm
-def genetic_algorithm(objective, n_bits, n_iter, n_pop, r_cross, r_mut):
-    target = list("Ala ma kota")
-    #allowed_chars = list("Ala mkot12.")
+def genetic_algorithm(objective, n_iter, n_pop, r_cross, c_target ):
+    target = list( c_target )
     allowed_chars = list("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz !#.")
+    # mutation rate
+    r_mut = 1.0 / float( len(target))
     # initial population of random bitstring
     pop = list()
     for i in range(n_pop):
@@ -63,18 +63,19 @@ def genetic_algorithm(objective, n_bits, n_iter, n_pop, r_cross, r_mut):
     for gen in range(n_iter):
         # evaluate all candidates in the population
         scores = [objective(c, target) for c in pop]
+        
         # check for new best solution
-        #for i in range(n_pop):
-        #    print( pop[i], scores[i] )
         for i in range(n_pop):
             if scores[i] < best_eval:
                 best, best_eval = pop[i], scores[i]
+        
         print(">%d, new best f('%s') = %.3f" % (gen,  "".join(best), best_eval))
         if ( best_eval == 0 ):
             break
+        
         # select parents
         selected = [selection(pop, scores) for _ in range(n_pop)]
-        #print( selected )
+        
         # create the next generation
         children = list()
         for i in range(0, n_pop, 2):
@@ -94,16 +95,13 @@ def genetic_algorithm(objective, n_bits, n_iter, n_pop, r_cross, r_mut):
 
 # define the total iterations
 n_iter = 100
-# bits
-n_bits = 10
 # define the population size
 n_pop = 100
 # crossover rate
 r_cross = 0.9
-# mutation rate
-r_mut = 1.0 / float(n_bits)
 # perform the genetic algorithm search
-best, score = genetic_algorithm(calc_fit, n_bits, n_iter, n_pop, r_cross, r_mut)
+c_target = "Ala ma kota i psa."
+best, score = genetic_algorithm(calc_fit, n_iter, n_pop, r_cross, c_target )
 print('Done!')
 print('f("%s") = %f' % ( "".join(best), score))
 #sprawdz()
