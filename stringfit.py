@@ -12,7 +12,6 @@ def calc_fit(lStr,lTarget):
     r = sum( (lStr[i]!=lTarget[i]) for i in range(len(lStr)) )
     return r
     
- 
 # tournament selection
 def selection(pop, scores, k=3):
     # first random selection
@@ -22,7 +21,7 @@ def selection(pop, scores, k=3):
         if scores[ix] < scores[selection_ix]:
             selection_ix = ix
     return pop[selection_ix]
- 
+
 # crossover two parents to create two children
 def crossover(p1, p2, r_cross):
     # children are copies of parents by default
@@ -104,4 +103,3 @@ c_target = "Ala ma kota i psa."
 best, score = genetic_algorithm(calc_fit, n_iter, n_pop, r_cross, c_target )
 print('Done!')
 print('f("%s") = %f' % ( "".join(best), score))
-#sprawdz()
